@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Moon, Sun } from 'lucide-react'
+import { Book, DoorOpen, LogIn, LogOut, Menu, Moon, Sun, User } from 'lucide-react'
 import { Button } from "../ui/button"
 import { GlassModal } from '../modals/GlassModal'
 import LoginForm from '../auth/LoginForm'
@@ -9,8 +9,13 @@ import RegisterForm from '../auth/RegisterForm'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store/store'
 
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Link } from 'react-router-dom'
+
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+
 
   useEffect(() => {
     if (darkMode) {
@@ -23,69 +28,178 @@ export default function Navbar() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 backdrop-filter backdrop-blur-xl bg-gradient-to-b from-white/60 to-white/30 dark:from-gray-900/60 dark:to-gray-900/30 border-b border-gray-200 dark:border-gray-700 shadow-lg z-50">
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <a href="/" className="text-2xl font-semibold text-gray-800 dark:text-white text-shadow">
-              <img src="./vlpha.png" className='w-10 bg-black rounded-full' alt="Logo" />
-            </a>
+    <nav className="fixed top-0 left-0 right-0 backdrop-filter backdrop-blur-xl bg-gradient-to-b from-blue-800/60 to-blue-950/30 dark:from-black/60 dark:to-black/30 shadow-lg z-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center gap-4 justify-between h-24">
+          <div className="">
+            <Link
+              to="/">
+              <img
+                src="./BetMate-Logo.png"
+                className="w-24 md:w-24 dark:hidden"
+                alt="Logo"
+              />
+              <img
+                src="./BetMate-Logo.png"
+                className="w-24 md:w-24 hidden dark:block"
+                alt="Logo"
+              />
+              
+            </Link>
           </div>
-          <div className="flex items-center space-x-4">
-            {!isAuth && (
-            <>
-              <GlassModal
-                trigger={
-                  <Button variant="ghost" className="text-gray-800 bg-transparent dark:text-white hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-300 ease-in-out backdrop-blur-md">
-                    Login
+          <div className="w-fit md:w-full flex justify-between">
+            <div className="hidden md:flex  items-center space-x-8">
+              <NavLink to="/books" icon={<Book className="mr-2 h-4 w-4" />}>
+                Books
+              </NavLink>
+              {isAuth && (
+                <>
+                  <NavLink
+                    to="/profile"
+                    icon={<User className="mr-2 h-4 w-4" />}
+                  >
+                    Profile
+                  </NavLink>
+                </>
+              )}
+            </div>
+            <div className="w-fit flex gap-4">
+              {/* Auth Buttons */}
+              <div className="hidden md:flex items-center space-x-4">
+                {!isAuth ? (
+                  <>
+                    <NavLink
+                      to="/login"
+                      icon={<LogIn className="mr-2 h-4 w-4" />}
+                    >
+                      Login
+                    </NavLink>{" "}
+                    <NavLink
+                      to="/register"
+                      icon={<DoorOpen className="mr-2 h-4 w-4" />}
+                    >
+                      Register
+                    </NavLink>{" "}
+                  </>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => console.log("Logout")}
+                    className="rounded-full bg-white/40 dark:bg-blue-700/40 text-gray-800 dark:text-white hover:bg-white/60 dark:hover:bg-blue-600/60 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 transition-all duration-300 ease-in-out backdrop-blur-md"
+                  >
+                    <LogOut className="h-[1.2rem] w-[1.2rem]" />
                   </Button>
-                }
-              >
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    Log in to your account
-                  </h2>
-                  
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Or{' '}
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                      start your 14-day free trial
-                    </a>
-                  </p>
-                </div>
-                <LoginForm />
-              </GlassModal>
-  
-              <GlassModal 
-              trigger={
-                <Button variant="outline" className="text-gray-800 dark:text-white border-gray-300 dark:border-gray-600 hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-300 ease-in-out backdrop-blur-md">
-                Register
-              </Button>
-              }
-              >
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    Register for a new account
-                  </h2>
-                </div>
-                <RegisterForm />
-              </GlassModal>
-            </>
-            )}           
-
-            {/* Dark Mode Toggle Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setDarkMode(!darkMode)}
-              className="rounded-full bg-white/40 dark:bg-gray-700/40 text-gray-800 dark:text-white hover:bg-white/60 dark:hover:bg-gray-600/60 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition-all duration-300 ease-in-out backdrop-blur-md"
-            >
-              {darkMode ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
-              <span className="sr-only">{darkMode ? 'Switch to light mode' : 'Switch to dark mode'}</span>
-            </Button>
+                )}
+              </div>
+              {/* Navigation Buttons */}
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="rounded-full bg-white/40 dark:bg-blue-700/40 text-gray-800 dark:text-white hover:bg-white/60 dark:hover:bg-blue-600/60 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 transition-all duration-300 ease-in-out backdrop-blur-md"
+                >
+                  {darkMode ? (
+                    <Sun className="h-[1.2rem] w-[1.2rem]" />
+                  ) : (
+                    <Moon className="h-[1.2rem] w-[1.2rem]" />
+                  )}
+                  <span className="sr-only">
+                    {darkMode ? "Switch to light mode" : "Switch to dark mode"}
+                  </span>
+                </Button>
+                <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="md:hidden rounded-full bg-white/40 dark:bg-blue-700/40 text-gray-800 dark:text-white hover:bg-white/60 dark:hover:bg-blue-600/60 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 transition-all duration-300 ease-in-out backdrop-blur-md"
+                    >
+                      <Menu className="h-[1.2rem] w-[1.2rem]" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="right"
+                    className="w-[300px] bg-transparent sm:w-[400px]"
+                  >
+                    <nav className="flex flex-col space-y-4 mt-8">
+                      <>
+                        <NavLink
+                          to="/books"
+                          icon={<Book className="mr-2 h-4 w-4" />}
+                        >
+                          Books
+                        </NavLink>
+                      </>
+                      {isAuth && (
+                        <>
+                          <NavLink
+                            to="/profile"
+                            icon={<User className="mr-2 h-4 w-4" />}
+                          >
+                            Profile
+                          </NavLink>
+                        </>
+                      )}
+                      {!isAuth ? (
+                        <>
+                          <NavLink
+                            to="/login"
+                            icon={<LogIn className="mr-2 h-4 w-4" />}
+                          >
+                            Login
+                          </NavLink>{" "}
+                          <NavLink
+                            to="/register"
+                            icon={<DoorOpen className="mr-2 h-4 w-4" />}
+                          >
+                            Register
+                          </NavLink>{" "}
+                        </>
+                      ) : (
+                        <Button
+                          onClick={() => console.log("Logout")}
+                          variant="outline"
+                          className="text-white dark:text-white border-blue-300 dark:border-blue-600 hover:bg-white/40 dark:hover:bg-blue-700/40 transition-all duration-300 ease-in-out backdrop-blur-md"
+                        >
+                          {/* <LogOut /> */}
+                          Logout
+                        </Button>
+                      )}
+                    </nav>
+                  </SheetContent>
+                </Sheet>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </nav>
   )
 }
+
+function NavLink({
+  to,
+  children,
+  icon,
+}: {
+  to: string;
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      className="text-white dark:text-white hover:text-blue-300 dark:hover:text-gray-300 transition-colors duration-300 relative group"
+    >
+      <span className="flex items-center">
+        {icon}
+        {children}
+      </span>
+      <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-blue-800 dark:bg-white transform scale-x-0 transition-transform duration-300 origin-left group-hover:scale-x-100"></span>
+    </Link>
+  );
+}
+

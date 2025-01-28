@@ -56,7 +56,7 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                  <Input placeholder="John" {...field} className="bg-white/50 dark:bg-blue-800/50" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -69,7 +69,7 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                  <Input placeholder="Doe" {...field} className="bg-white/50 dark:bg-blue-800/50" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,7 +83,7 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="johndoe" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                <Input placeholder="johndoe" {...field} className="bg-white/50 dark:bg-blue-800/50" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +96,7 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="john@example.com" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                <Input placeholder="john@example.com" {...field} className="bg-white/50 dark:bg-blue-800/50" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -109,7 +109,7 @@ export default function RegisterForm() {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="+1234567890" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                <Input placeholder="+1234567890" {...field} className="bg-white/50 dark:bg-blue-800/50" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,12 +127,12 @@ export default function RegisterForm() {
                     type={showPassword ? "text" : "password"} 
                     placeholder="********" 
                     {...field} 
-                    className="bg-white/50 dark:bg-gray-800/50 pr-10" 
+                    className="bg-white/50 dark:bg-blue-800/50 pr-10" 
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
+                    className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-blue-700 hover:text-black dark:text-blue-300 dark:hover:text-blue-100 transition-colors duration-200"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
@@ -159,12 +159,12 @@ export default function RegisterForm() {
                     type={showConfirmPassword ? "text" : "password"} 
                     placeholder="********" 
                     {...field} 
-                    className="bg-white/50 dark:bg-gray-800/50 pr-10" 
+                    className="bg-white/50 dark:bg-blue-800/50 pr-10" 
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-gray-700 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
+                    className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-blue-700 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-100 transition-colors duration-200"
                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
                     {showConfirmPassword ? (

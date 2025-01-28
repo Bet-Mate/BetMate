@@ -73,7 +73,7 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                    <Input placeholder="Enter your email" {...field} className="bg-white/50 dark:bg-blue-800/50" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -87,11 +87,11 @@ export default function LoginForm() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className='relative'>
-                      <Input type={ showPassword ? "text": "password"} placeholder="Enter your password" {...field} className="bg-white/50 dark:bg-gray-800/50" />
+                      <Input type={ showPassword ? "text": "password"} placeholder="Enter your password" {...field} className="bg-white/50 dark:bg-blue-800/50" />
                       <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-gray-700 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors duration-200"
+                      className="absolute inset-y-0 bg-transparent border-0 right-0 pr-3 flex items-center text-blue-700 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-100 transition-colors duration-200"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
@@ -125,7 +125,7 @@ export default function LoginForm() {
                           key={index}
                           type="text"
                           maxLength={1}
-                          className="w-12 h-12 text-center text-2xl font-bold rounded-md bg-white/50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
+                          className="w-12 h-12 text-center text-2xl font-bold rounded-md bg-white/50 dark:bg-blue-800/50 border border-blue-300 dark:border-blue-600 focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
                           ref={el => otpInputs.current[index] = el}
                           onChange={(e) => handleOtpChange(index, e.target.value)}
                           onKeyDown={(e) => handleKeyDown(e, index)}

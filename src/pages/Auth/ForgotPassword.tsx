@@ -29,13 +29,13 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="h-[93vh] flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 p-4 w-screen ">
-      <div className="w-full max-w-md space-y-8 p-8 rounded-xl shadow-lg sm:max-w-[425px] md:max-w-screen-md md:mx-auto backdrop-filter backdrop-blur-xl bg-white/60 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 ">
+    <div className="h-[93vh] flex items-center justify-center bg-gradient-to-b from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 p-4 w-screen ">
+      <div className="w-full max-w-md space-y-8 p-8 rounded-xl shadow-lg sm:max-w-[425px] md:max-w-screen-md md:mx-auto backdrop-filter backdrop-blur-xl bg-white/60 dark:bg-blue-900/60 border border-blue-200 dark:border-blue-700 ">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
+          <h2 className="mt-6 text-3xl font-bold text-blue-900 dark:text-white">
             Forgot Password
           </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">
             {isSubmitted 
               ? "If an account exists for the email provided, you will receive password reset instructions."
               : "Enter your email address and we'll send you a link to reset your password."}
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                       <Input 
                         placeholder="Enter your email" 
                         {...field} 
-                        className="bg-white/50 dark:bg-gray-800/50 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                        className="bg-white/50 dark:bg-blue-800/50 border-blue-300 dark:border-blue-600 text-blue-900 dark:text-white placeholder-blue-500 dark:placeholder-blue-400"
                       />
                     </FormControl>
                     <FormMessage />

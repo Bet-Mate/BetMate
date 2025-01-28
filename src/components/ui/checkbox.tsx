@@ -11,7 +11,7 @@ const Checkbox = React.forwardRef<
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(
-      "peer h-5 w-5 flex items-center justify-center rounded border border-gray-300 shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+      "peer h-5 w-5 flex items-center justify-center rounded border border-blue-300 shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
       " p-0 dark:bg-black bg-white", // Background color when checked
       "data-[state=checked]:border-transparent", // Optional: remove border when checked
       "disabled:cursor-not-allowed disabled:opacity-50", // Disabled styling
