@@ -36,7 +36,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 backdrop-filter backdrop-blur-xl bg-gradient-to-b from-blue-800/60 to-blue-950/30 dark:from-black/60 dark:to-black/30 shadow-lg z-50">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-8xl mx-auto md:mx-16 px-4">
         <div className="flex items-center gap-4 justify-between h-24">
           <div className="">
             <Link to="/">
