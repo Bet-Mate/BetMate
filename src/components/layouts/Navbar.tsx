@@ -1,29 +1,36 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Book, DoorOpen, LogIn, LogOut, Menu, Moon, Sun, User } from 'lucide-react'
-import { Button } from "../ui/button"
-import { GlassModal } from '../modals/GlassModal'
-import LoginForm from '../auth/LoginForm'
-import RegisterForm from '../auth/RegisterForm'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/store/store'
+import { useState, useEffect } from "react";
+import {
+  DoorOpen,
+  Gem,
+  Home,
+  LogIn,
+  LogOut,
+  Menu,
+  Moon,
+  Sun,
+  TvMinimalPlay,
+  User,
+} from "lucide-react";
+import { Button } from "../ui/button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
 
   useEffect(() => {
     if (darkMode) {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove("dark");
     }
-  }, [darkMode])
+  }, [darkMode]);
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
 
@@ -32,8 +39,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center gap-4 justify-between h-24">
           <div className="">
-            <Link
-              to="/">
+            <Link to="/">
               <img
                 src="./BetMate-Logo.png"
                 className="w-24 md:w-24 dark:hidden"
@@ -44,13 +50,18 @@ export default function Navbar() {
                 className="w-24 md:w-24 hidden dark:block"
                 alt="Logo"
               />
-              
             </Link>
           </div>
           <div className="w-fit md:w-full flex justify-between">
             <div className="hidden md:flex  items-center space-x-8">
-              <NavLink to="/books" icon={<Book className="mr-2 h-4 w-4" />}>
-                Books
+              <NavLink to="/" icon={<Home className="mr-2 h-4 w-4" />}>
+                Home
+              </NavLink>
+              <NavLink to="/" icon={<TvMinimalPlay className="mr-2 h-4 w-4" />}>
+                Live Betting
+              </NavLink>
+              <NavLink to="/" icon={<Gem className="mr-2 h-4 w-4" />}>
+                Promotions
               </NavLink>
               {isAuth && (
                 <>
@@ -58,7 +69,7 @@ export default function Navbar() {
                     to="/profile"
                     icon={<User className="mr-2 h-4 w-4" />}
                   >
-                    Profile
+                    Account
                   </NavLink>
                 </>
               )}
@@ -125,24 +136,31 @@ export default function Navbar() {
                     className="w-[300px] bg-transparent sm:w-[400px]"
                   >
                     <nav className="flex flex-col space-y-4 mt-8">
-                      <>
                         <NavLink
-                          to="/books"
-                          icon={<Book className="mr-2 h-4 w-4" />}
+                          to="/"
+                          icon={<Home className="mr-2 h-4 w-4" />}
                         >
-                          Books
+                          Home
                         </NavLink>
-                      </>
-                      {isAuth && (
-                        <>
-                          <NavLink
-                            to="/profile"
-                            icon={<User className="mr-2 h-4 w-4" />}
-                          >
-                            Profile
-                          </NavLink>
-                        </>
-                      )}
+                        <NavLink
+                          to="/"
+                          icon={<TvMinimalPlay className="mr-2 h-4 w-4" />}
+                        >
+                          Live Betting
+                        </NavLink>
+                        <NavLink to="/" icon={<Gem className="mr-2 h-4 w-4" />}>
+                          Promotions
+                        </NavLink>
+                        {isAuth && (
+                          <>
+                            <NavLink
+                              to="/profile"
+                              icon={<User className="mr-2 h-4 w-4" />}
+                            >
+                              Account
+                            </NavLink>
+                          </>
+                        )}
                       {!isAuth ? (
                         <>
                           <NavLink
@@ -177,7 +195,7 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
 function NavLink({
@@ -202,4 +220,3 @@ function NavLink({
     </Link>
   );
 }
-
