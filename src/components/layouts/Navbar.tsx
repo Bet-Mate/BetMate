@@ -42,12 +42,14 @@ export default function Navbar() {
             <Link to="/">
               <img
                 src="./BetMate-Logo.png"
-                className="w-24 md:w-24 dark:hidden"
+                className="hidden md:block w-48 "
                 alt="Logo"
               />
+            </Link>
+            <Link to="/">
               <img
-                src="./BetMate-Logo.png"
-                className="w-24 md:w-24 hidden dark:block"
+                src="./adaptive-icon.png"
+                className="block md:hidden w-14"
                 alt="Logo"
               />
             </Link>

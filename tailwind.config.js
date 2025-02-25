@@ -94,6 +94,8 @@ export default {
   		},
 		fontFamily: {
 			"poppins": "Poppins",
+			"autour": "Autour One",
+			"niconne": "Niconne"
 		}
   	}
   },
