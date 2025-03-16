@@ -11,7 +11,7 @@ const Sidebar = () => {
   return (
     <div className="w-64 h-screen fixed left-0 top-0 bg-[#181818] text-gray-400">
       <div className="p-4">
-        <div className="">
+        <div className="my-4 self-center">
           <Link to="/">
             <img
               src="./BetMate-Logo.png"

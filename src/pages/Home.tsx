@@ -7,8 +7,8 @@ import BonusSection from "@/components/home/BonusSection";
 function Home() {
   return (
     <>
-      {/* <HeroSection />
-      <QuickLinks/>
+      <HeroSection />
+      {/* <QuickLinks/>
       <FeaturesSection/>
       <StatsSection/>
       <BonusSection/> */}

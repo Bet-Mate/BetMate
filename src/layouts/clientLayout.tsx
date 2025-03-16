@@ -12,7 +12,7 @@ export default function Layout({ children }: LayoutProps) {
       <Sidebar/>
       <div className="flex-1">
         <Navbar />
-        <main className="flex-grow">
+        <main className="ml-64 pt-16 min-h-screen ">
           {children}
         </main>
       </div>

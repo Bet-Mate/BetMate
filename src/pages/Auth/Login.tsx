@@ -5,13 +5,13 @@ import LoginForm from '@/components/auth/LoginForm'
 
 export default function Login() {
   return (
-    <div className="h-[93vh] flex items-center justify-center bg-gradient-to-b from-blue-900 to-blue-950 dark:from-black dark:to-black p-4 w-screen">
-      <div className="w-full max-w-md space-y-8 p-8 rounded-xl shadow-lg sm:max-w-[425px] md:max-w-screen-md md:mx-auto backdrop-filter backdrop-blur-xl bg-white/60 dark:bg-blue-900/60 border border-blue-200 dark:border-blue-700">
+    <div className="h-screen flex items-center justify-center bg-black p-4 w-screen">
+      <div className="w-full max-w-md space-y-8 p-8 rounded-xl shadow-lg sm:max-w-[425px] md:max-w-screen-md md:mx-auto backdrop-filter backdrop-blur-xl bg-[#181818]">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-blue-900 dark:text-white">
-            Log in to your account
+          <h2 className="mt-6 text-3xl font-bold text-white">
+          Welcome back
           </h2>
-          <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">
+          <p className="mt-2 text-sm text-gray-200">
             Enter your credentials to access your account
           </p>
         </div>
@@ -19,18 +19,18 @@ export default function Login() {
         <div className="mt-4 text-center">
           <Link 
             to="/forgot-password" 
-            className="text-sm font-medium text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary transition-colors"
+            className="text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors"
           >
             Forgot your password?
           </Link>
         </div>
         <div className="mt-4 text-center">
-          <span className="text-sm text-blue-600 dark:text-blue-400">
+          <span className="text-sm text-white">
             Don't have an account?{' '}
           </span>
           <Link 
             to="/register" 
-            className="text-sm font-medium text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary transition-colors"
+            className="text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors"
           >
             Sign up
           </Link>

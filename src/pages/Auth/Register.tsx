@@ -4,10 +4,10 @@ import RegisterForm from "@/components/auth/RegisterForm";
 
 export default function Login() {
   return (
-    <div className="h-full flex items-center justify-center bg-gradient-to-b from-blue-900 to-blue-950 dark:from-black dark:to-dark p-4 w-screen">
-      <div className="w-full max-w-md space-y-8 p-8 rounded-xl shadow-lg sm:max-w-[425px] md:max-w-screen-md md:mx-auto backdrop-filter backdrop-blur-xl bg-white/60 dark:bg-blue-900/60 border border-blue-200 dark:border-blue-700">
+    <div className="h-screen flex items-center justify-center bg-black p-4 w-screen">
+      <div className="w-full max-w-md space-y-8 p-8 rounded-xl shadow-lg sm:max-w-[425px] md:max-w-screen-md md:mx-auto backdrop-filter backdrop-blur-xl bg-[#181818] ">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-blue-900 dark:text-white">
+          <h2 className="mt-6 text-3xl font-bold text-white">
             Get started now
           </h2>
           <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">
