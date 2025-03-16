@@ -7,11 +7,11 @@ import BonusSection from "@/components/home/BonusSection";
 function Home() {
   return (
     <>
-      <HeroSection />
+      {/* <HeroSection />
       <QuickLinks/>
       <FeaturesSection/>
       <StatsSection/>
-      <BonusSection/>
+      <BonusSection/> */}
     </>
   );
 }
