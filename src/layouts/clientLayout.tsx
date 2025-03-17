@@ -8,11 +8,11 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex w-screen'>
       <Sidebar/>
-      <div className="flex-1">
+      <div className="flex-1 max-w-screen-2xl ">
         <Navbar />
-        <main className="ml-64 pt-16 min-h-screen ">
+        <main className="min-h-screen z-10 w-full">
           {children}
         </main>
       </div>

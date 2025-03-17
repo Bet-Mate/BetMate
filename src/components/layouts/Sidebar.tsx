@@ -1,10 +1,10 @@
-import { Home, FolderRoot as Football, ChevronDown } from "lucide-react";
+import { Home, Volleyball } from "lucide-react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 
 const menuItems = [
-  { icon: Home, label: "Home", active: true },
-  { icon: Football, label: "Games" },
+  { icon: Home, label: "Home", path: "/" },
+  { icon: Volleyball, label: "Games", path: "/games" },
 ];
 
 const Sidebar = () => {
@@ -31,18 +31,17 @@ const Sidebar = () => {
 
         <div className="space-y-1">
           {menuItems.map((item) => (
-            <button
-              key={item.label}
-              className={clsx(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors",
-                item.active
-                  ? "bg-orange-500/10 text-orange-500"
-                  : "hover:bg-[#2C2C2E] text-gray-400"
-              )}
-            >
-              <item.icon className="w-5 h-5" />
-              <span className="text-sm">{item.label}</span>
-            </button>
+            <Link to={item.path} key={item.label}>
+              <button
+                key={item.label}
+                className={clsx(
+                  "w-full text-white flex border-0 items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors hover:bg-orange-500/10 hover:text-orange-500"
+                )}
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="text-sm">{item.label}</span>
+              </button>
+            </Link>
           ))}
         </div>
 
