@@ -8,9 +8,9 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className='flex w-screen'>
+    <div className='flex w-screen overflow-hidden'>
       <Sidebar/>
-      <div className="flex-1 max-w-screen-2xl ">
+      <div className="flex-1 w-screen ">
         <Navbar />
         <main className="min-h-screen z-10 w-full">
           {children}

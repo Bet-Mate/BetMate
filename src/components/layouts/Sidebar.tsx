@@ -1,13 +1,25 @@
-import { Home, Volleyball } from "lucide-react";
+import { BadgeDollarSign, History, Home, LogOut, Volleyball } from "lucide-react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const menuItems = [
+const guestMenu = [
   { icon: Home, label: "Home", path: "/" },
   { icon: Volleyball, label: "Games", path: "/games" },
 ];
 
+const authMenu = [
+  { icon: Home, label: "Home", path: "/" },
+  { icon: Volleyball, label: "Games", path: "/games" },
+  { icon: Home, label: "Profile", path: "/profile" },
+  { icon: History, label: "Betting History", path: "/my-bets" },
+  { icon: BadgeDollarSign, label: "My Transactions", path: "/deposit" },
+  { icon: LogOut, label: "Logout", path: "/logout" },
+];
+
 const Sidebar = () => {
+  const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
+  const menuItems = isAuth ? authMenu : guestMenu;
   return (
     <div className="w-64 h-screen fixed left-0 top-0 bg-[#181818] text-gray-400">
       <div className="p-4">
@@ -27,7 +39,6 @@ const Sidebar = () => {
             />
           </Link>
         </div>
-
 
         <div className="space-y-1">
           {menuItems.map((item) => (

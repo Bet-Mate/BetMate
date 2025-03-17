@@ -1,18 +1,17 @@
-import HeroSection from "@/components/home/HeroSection";
+import LiveGames from "@/components/home/LiveGames";
 import "../App.css";
-import QuickLinks from "@/components/home/QuickLinks";
-import FeaturesSection from "@/components/home/FeaturesSection";
-import StatsSection from "@/components/home/StatsSection";
 import BonusSection from "@/components/home/BonusSection";
+import UpcomingMatches from "@/components/home/Upcoming";
+import { useSelector } from "react-redux";
+
 function Home() {
+  const isAuth  = useSelector((state: any) => state.auth.isAuthenticated);
   return (
     <>
-      <div className="w-full ml-64 mt-16 p-6 ">
-        <HeroSection />
-        {/* <QuickLinks/>
-      <FeaturesSection/>
-      <StatsSection/>
-      <BonusSection/> */}
+      <div className="w-full pl-[18rem] mt-16 p-6 ">
+        {!isAuth && (<BonusSection />)}
+        <LiveGames />
+        <UpcomingMatches />
       </div>
     </>
   );
