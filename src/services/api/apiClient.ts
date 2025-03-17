@@ -1,33 +1,19 @@
-import { AxiosError } from "axios";
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
-export const loginUser = async (credentials: {
-  identifier: string;
-  password: string;
-  rememberMe: boolean;
-}) => {
-  try {
-    const response = await axiosInstance.post("/auth/login", credentials);
-    return response.data;
-  } catch (err: any) {
-    if (err instanceof AxiosError) {
-      console.error("Axios Error: ", err.response?.data || err.message);
-    } else {
-      console.error("Unknown Error: ", err);
-    }
-    throw err;
-  }
-};
+const apiClient = axios.create({
+  baseURL: "http://localhost:3000",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export const verifyOtp = async (otpData: {
-  identifier: string;
-  otp: string;
-  rememberDevice: boolean;
-}) => {
-  try {
-    const response = await axiosInstance.post("/auth/register", otpData);
-    return response.data;
-  } catch (err) {
-    throw err;
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token'); 
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
+  return config;
+});
+
+export default apiClient;

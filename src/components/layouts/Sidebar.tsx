@@ -1,7 +1,14 @@
-import { BadgeDollarSign, History, Home, LogOut, Volleyball } from "lucide-react";
+import {
+  BadgeDollarSign,
+  History,
+  Home,
+  LogOut,
+  Volleyball,
+} from "lucide-react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/store/slices/authSlice";
 
 const guestMenu = [
   { icon: Home, label: "Home", path: "/" },
@@ -14,12 +21,17 @@ const authMenu = [
   { icon: Home, label: "Profile", path: "/profile" },
   { icon: History, label: "Betting History", path: "/my-bets" },
   { icon: BadgeDollarSign, label: "My Transactions", path: "/deposit" },
-  { icon: LogOut, label: "Logout", path: "/logout" },
 ];
 
 const Sidebar = () => {
   const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
   const menuItems = isAuth ? authMenu : guestMenu;
+
+  async function handleLogout() {
+    dispatch(logout());
+  }
+
   return (
     <div className="w-64 h-screen fixed left-0 top-0 bg-[#181818] text-gray-400">
       <div className="p-4">
@@ -54,6 +66,7 @@ const Sidebar = () => {
               </button>
             </Link>
           ))}
+
         </div>
 
         <div className="mt-8">
@@ -101,6 +114,16 @@ const Sidebar = () => {
           </div>
         </div>
 
+        {isAuth ? (<div className="mt-8">
+          <button
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-[#2C2C2E]"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="text-sm">Logout</span>
+          </button>
+        </div>) : (
+
         <div className="absolute bottom-4 left-4 right-4">
           <div className="bg-[#2C2C2E] rounded-lg p-4">
             <h4 className="text-white text-sm font-medium mb-2">
@@ -113,7 +136,7 @@ const Sidebar = () => {
               Register Now
             </button>
           </div>
-        </div>
+        </div>)}
       </div>
     </div>
   );

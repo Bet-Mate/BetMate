@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import  { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,6 +13,12 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff, Key, User } from "lucide-react";
+import { loginUser } from "@/services/AuthService";
+import { toastNotifier } from "@/utils/toastNotifier";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "@/store/slices/authSlice";
+import {GridLoader} from "react-spinners";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -23,6 +29,10 @@ const loginSchema = z.object({
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formStatus, setFormStatus] = useState({ success: false, message: "" });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -32,8 +42,72 @@ export default function LoginForm() {
     },
   });
 
-  function onLoginSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+  async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
+    const credentials = {
+      email: values.email,
+      password: values.password,
+    };
+  
+    try {
+      setLoading(true);
+      const response = await loginUser(credentials);
+
+
+      if (!response || !response.accessToken) {
+        setFormStatus({
+          success: false,
+          message: "Invalid login credentials. Please try again.",
+        });
+
+        setLoading(false);
+        return;
+      }
+      if (response.error) {
+        toastNotifier({
+          message:
+            typeof response.error === "string"
+              ? response.error
+              : JSON.stringify(response.error),
+          type: "error",
+          duration: 3000,
+        });
+      }
+      dispatch(
+        login({
+          user: {
+            email: response.user.email || "",
+            name: response.user.name || "",
+            role: response.user.role || "",
+          },
+          accessToken: response.accessToken,
+        })
+      );
+      toastNotifier({
+        message: "Logged in successfully!",
+        type: "success",
+        duration: 3000,
+      });
+      //Set Token to local storage
+      localStorage.setItem("token", response.accessToken);
+      setFormStatus({ success: true, message: "Logged in successfully!" });
+      setLoading(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Login error:", error);
+      setFormStatus({
+        success: false,
+        message: "Something went wrong. Please try again.",
+      });
+      setLoading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center">
+        <GridLoader color="#d64218" size={10} />
+      </div>
+    );
   }
 
   return (
@@ -43,6 +117,18 @@ export default function LoginForm() {
           onSubmit={loginForm.handleSubmit(onLoginSubmit)}
           className="space-y-4"
         >
+          {/* Display Success/Error Message */}
+          {formStatus.message && (
+              <div
+                className={`text-center text-sm p-2 rounded-md ${
+                  formStatus.success ?
+                    "bg-green-200 text-green-700"
+                    : "bg-red-200 text-red-700"
+                }`}
+              >
+                {formStatus.message}
+              </div>
+            )}
           <FormField
             control={loginForm.control}
             name="email"

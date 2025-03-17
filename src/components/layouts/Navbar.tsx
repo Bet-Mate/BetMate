@@ -37,13 +37,13 @@ const Navbar = () => {
           {/* User Profile */}
           <div className="flex items-center gap-3">
             <img
-              src="https://ui-avatars.com/api/?name=John+Doe&background=FF6B00&color=fff"
+              src={`https://ui-avatars.com/api/?name=${user.name[0]}+${user.name[1]}&background=FF6B00&color=fff`}
               alt="Profile"
               className="w-8 h-8 rounded-full"
             />
             <div className="flex items-center gap-2 cursor-pointer group">
               <div>
-                <div className="text-sm font-medium text-white">{user?.username}</div>
+                <div className="text-sm font-medium text-white">{user?.name}</div>
                 <div className="text-xs text-gray-400">{user?.email}</div>
               </div>
             </div>
