@@ -88,7 +88,9 @@ export default function LoginForm() {
         duration: 3000,
       });
       //Set Token to local storage
-      localStorage.setItem("token", response.accessToken);
+      // localStorage.setItem("token", response.accessToken);
+      console.log("Login response:", response);
+      
       setFormStatus({ success: true, message: "Logged in successfully!" });
       setLoading(false);
       navigate("/");

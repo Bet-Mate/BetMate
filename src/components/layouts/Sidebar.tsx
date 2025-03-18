@@ -1,9 +1,9 @@
 import {
-  BadgeDollarSign,
   History,
   Home,
   LogOut,
   Volleyball,
+  Wallet,
 } from "lucide-react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
@@ -20,7 +20,7 @@ const authMenu = [
   { icon: Volleyball, label: "Games", path: "/games" },
   { icon: Home, label: "Profile", path: "/profile" },
   { icon: History, label: "Betting History", path: "/my-bets" },
-  { icon: BadgeDollarSign, label: "My Transactions", path: "/deposit" },
+  { icon: Wallet, label: "My Wallet", path: "/my-wallet" },
 ];
 
 const Sidebar = () => {
