@@ -19,8 +19,8 @@ const authMenu = [
   { icon: Home, label: "Home", path: "/" },
   { icon: Volleyball, label: "Games", path: "/games" },
   { icon: Home, label: "Profile", path: "/profile" },
-  { icon: History, label: "Betting History", path: "/my-bets" },
   { icon: Wallet, label: "My Wallet", path: "/my-wallet" },
+  { icon: History, label: "Betting History", path: "/history" },
 ];
 
 const Sidebar = () => {

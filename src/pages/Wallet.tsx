@@ -10,7 +10,7 @@ export default function WalletPage() {
   const [activeTab, setActiveTab] = useState("deposit")
 
   return (
-    <div className="flex-1 w-full pl-[18rem] pt-16 p-6 bg-[#121212] text-white">
+    <div className="flex-1 h-screen pl-[18rem] pt-20 p-6 bg-[#121212] text-white">
       <h1 className="mb-6 text-2xl font-bold flex items-center">
         <Wallet className="mr-2" /> My Wallet
       </h1>

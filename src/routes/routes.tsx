@@ -6,6 +6,7 @@ import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
 import GamesPage from "@/pages/Games";
 import WalletPage from "@/pages/Wallet";
+import HistoryPage from "@/pages/History";
 
 const routes: RouteObject[] = [
   {
@@ -48,6 +49,14 @@ const routes: RouteObject[] = [
       </ProtectedRoute>
     ),
   },
+  {
+    path: "history",
+    element: (
+      <ProtectedRoute>
+        <HistoryPage />
+      </ProtectedRoute>
+    ),
+  }
 ];
 
 export default routes;
