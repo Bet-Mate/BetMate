@@ -5,7 +5,7 @@ export default function MatchCardLive() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXmJnql149rVW3m7zUOWB51iBd3firIobTpw&s"
+            src="/leagues/epl.webp"
             alt="Premier League"
             width={40}
             height={40}

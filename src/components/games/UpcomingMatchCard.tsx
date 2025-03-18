@@ -6,7 +6,7 @@ export default function MatchCardUpcoming() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
             <img
-              src="https://soccerwizdom.com/wp-content/uploads/2024/11/fgdfhfd.png"
+              src="/leagues/seriea.jpg"
               alt="Serie A"
               width={40}
               height={40}
@@ -64,7 +64,7 @@ export default function MatchCardUpcoming() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBqp1HnlZ5IYdv7IBaBXAZfqN5kClmqSFM9g&s"
+              src="/leagues/champs.jpg"
               alt="Champions League"
               width={40}
               height={40}

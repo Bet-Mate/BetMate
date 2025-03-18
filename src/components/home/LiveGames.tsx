@@ -5,7 +5,7 @@ const liveMatches = [
       id: 1,
       league: {
         name: 'Premier League',
-        logo: 'https://media.api-sports.io/football/leagues/39.png'
+        logo: '/leagues/epl.webp'
       },
       time: '32\'',
       status: 'live',
@@ -71,9 +71,6 @@ const liveMatches = [
             <div className="flex gap-2">
               <button className={`px-4 py-2 text-sm rounded-lg bg-[#2C2C2E] text-white`}>
                 All
-              </button>
-              <button className="px-4 py-2 text-sm bg-orange-500 text-white rounded-lg">
-                Popular
               </button>
             </div>
           </div>
