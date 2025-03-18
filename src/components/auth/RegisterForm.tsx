@@ -13,9 +13,10 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff, Key, Mail, User } from "lucide-react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "@/services/AuthService";
+import { toastNotifier } from "@/utils/toastNotifier";
+import { GridLoader } from "react-spinners";
 
 const formSchema = z
   .object({
@@ -38,7 +39,6 @@ export default function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formStatus, setFormStatus] = useState({ success: false, message: "" });
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,20 +66,66 @@ export default function RegisterForm() {
     };
 
     try {
-        setLoading(true);
-        const response = await registerUser(credentials);
-    } catch (error ) {
+      setLoading(true);
+      const response = await registerUser(credentials);
+      if (!response) {
         setFormStatus({
-            success: false,
-            message: "Something went wrong. Please try again.",
-          });
-          setLoading(false);
+          success: false,
+          message: "Something went wrong. Please try again",
+        });
+        setLoading(false);
+        return;
+      }
+      if (response.error) {
+        toastNotifier({
+          message:
+            typeof response.error === "string"
+              ? response.error
+              : JSON.stringify(response.error),
+          type: "error",
+          duration: 3000,
+        });
+      }
+
+      toastNotifier({
+        message: "Register Successfull, Please check your email to continue",
+        type: "success",
+        duration: 5000,
+      });
+      setLoading(false);
+      navigate("/");
+    } catch (error) {
+      setFormStatus({
+        success: false,
+        message: "Something went wrong. Please try again.",
+      });
+      setLoading(false);
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center">
+        <GridLoader color="#d64218" size={10} />
+      </div>
+    );
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Display Success/Error Message */}
+        {formStatus.message && (
+          <div
+            className={`text-center text-sm p-2 rounded-md ${
+              formStatus.success
+                ? "bg-green-200 text-green-700"
+                : "bg-red-200 text-red-700"
+            }`}
+          >
+            {formStatus.message}
+          </div>
+        )}
         <FormField
           control={form.control}
           name="name"
