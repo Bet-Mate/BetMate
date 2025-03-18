@@ -10,18 +10,18 @@ export default function Login() {
           <h2 className="mt-6 text-3xl font-bold text-white">
             Get started now
           </h2>
-          <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">
+          <p className="mt-2 text-sm text-gray-200">
           Join the community and start your adventure today!
           </p>
         </div>
         <RegisterForm/>
         <div className="mt-4 text-center">
-          <span className="text-sm text-blue-600 dark:text-blue-400">
+          <span className="text-sm text-white">
             Already have an account?{' '}
           </span>
           <Link 
             to="/login" 
-            className="text-sm font-medium text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary transition-colors"
+            className="text-sm font-medium text-orange-500 hover:text-orange-600 transition-colors"
           >
             Login now
           </Link>
