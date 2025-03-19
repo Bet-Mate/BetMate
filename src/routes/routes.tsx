@@ -7,7 +7,7 @@ import Register from "@/pages/Auth/Register";
 import GamesPage from "@/pages/Games";
 import WalletPage from "@/pages/Wallet";
 import HistoryPage from "@/pages/History";
-import EmailVerificationPage from "@/pages/EmailVerification";
+import EmailVerificationPage from "@/pages/Auth/EmailVerification";
 
 const routes: RouteObject[] = [
   {

@@ -53,3 +53,17 @@ export const verifyEmail= async (token: string) => {
   throw err;
  }
 }
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const response = await apiClient.post("/auth/forgot-password", { email });
+    return response.data;
+  } catch (err: any) {
+    if (err instanceof AxiosError) {
+      console.error("Axios Error: ", err.response?.data || err.message);
+    } else {
+      console.error("Unknown Error: ", err);
+    }
+    throw err;
+  }
+}
