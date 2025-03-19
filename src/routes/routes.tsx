@@ -7,6 +7,7 @@ import Register from "@/pages/Auth/Register";
 import GamesPage from "@/pages/Games";
 import WalletPage from "@/pages/Wallet";
 import HistoryPage from "@/pages/History";
+import EmailVerificationPage from "@/pages/EmailVerification";
 
 const routes: RouteObject[] = [
   {
@@ -34,6 +35,14 @@ const routes: RouteObject[] = [
     element: (
       <PublicRoute>
         <Register />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: "/verify",
+    element: (
+      <PublicRoute>
+        <EmailVerificationPage />
       </PublicRoute>
     ),
   },

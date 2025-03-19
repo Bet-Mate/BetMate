@@ -35,3 +35,21 @@ export const registerUser = async (credentials: {
     throw err;
   }
 };
+
+export const verifyEmail= async (token: string) => {
+ try {
+   const response = await apiClient.get('/auth/verify', {
+     params: {
+       token
+     }
+   })
+    return response.data
+ } catch (err) {
+  if (err instanceof AxiosError) {
+    console.error("Axios Error: ", err.response?.data || err.message);
+  } else {
+    console.error("Unknown Error: ", err);
+  }
+  throw err;
+ }
+}
