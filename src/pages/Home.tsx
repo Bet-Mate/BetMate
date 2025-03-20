@@ -1,4 +1,3 @@
-import LiveGames from "@/components/home/LiveGames";
 import "../App.css";
 import BonusSection from "@/components/home/BonusSection";
 import UpcomingMatches from "@/components/home/Upcoming";
@@ -10,7 +9,6 @@ function Home() {
     <>
       <div className="w-full pl-[18rem] mt-16 p-6 ">
         {!isAuth && (<BonusSection />)}
-        <LiveGames />
         <UpcomingMatches />
       </div>
     </>
