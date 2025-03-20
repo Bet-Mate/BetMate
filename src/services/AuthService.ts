@@ -67,3 +67,17 @@ export const forgotPassword = async (email: string) => {
     throw err;
   }
 }
+
+export const resetPassword = async (token: string, password: string) => {
+  try {
+    const response = await apiClient.post("/auth/reset-password", { token, password });
+    return response.data;
+  } catch (err: any) {
+    if (err instanceof AxiosError) {
+      console.error("Axios Error: ", err.response?.data || err.message);
+    } else {
+      console.error("Unknown Error: ", err);
+    }
+    throw err;
+  }
+}

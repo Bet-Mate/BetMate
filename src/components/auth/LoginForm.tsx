@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -18,7 +18,8 @@ import { toastNotifier } from "@/utils/toastNotifier";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "@/store/slices/authSlice";
-import {GridLoader} from "react-spinners";
+import { GridLoader } from "react-spinners";
+import { AxiosError } from "axios";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -42,16 +43,56 @@ export default function LoginForm() {
     },
   });
 
+  const getErrorMessage = (error: any) => {
+    // If it's an Axios error
+    if (error instanceof AxiosError) {
+      // Check for specific status codes
+      if (error.response) {
+        const status = error.response.status;
+
+        // Handle common authentication errors
+        if (status === 400 || status === 401) {
+          return "Invalid credentials. Please try again.";
+        }
+
+        if (status === 404) {
+          return "Account not found. Please check your email or sign up.";
+        }
+
+        if (status === 429) {
+          return "Too many login attempts. Please try again later.";
+        }
+
+        if (status >= 500) {
+          return "Server error. Please try again later.";
+        }
+
+        if (error.response.data && error.response.data.message) {
+          return error.response.data.message;
+        }
+      }
+
+      // Network errors
+      if (error.message === "Network Error") {
+        return "Network error. Please check your internet connection.";
+      }
+    }
+
+    // Default or unknown errors
+    return error instanceof Error
+      ? error.message
+      : "An unexpected error occurred. Please try again.";
+  };
+
   async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
     const credentials = {
       email: values.email,
       password: values.password,
     };
-  
+
     try {
       setLoading(true);
       const response = await loginUser(credentials);
-
 
       if (!response || !response.accessToken) {
         setFormStatus({
@@ -90,16 +131,26 @@ export default function LoginForm() {
       //Set Token to local storage
       // localStorage.setItem("token", response.accessToken);
       console.log("Login response:", response);
-      
-      setFormStatus({ success: true, message: "Logged in successfully!" });
+
+      setFormStatus({ success: true, message: "Logged in successfully ... redirecting!" });
       setLoading(false);
-      navigate("/");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
-      console.error("Login error:", error);
+      const loginError = getErrorMessage(error);
       setFormStatus({
         success: false,
-        message: "Something went wrong. Please try again.",
+        message: loginError,
       });
+
+      toastNotifier({
+        message: loginError,
+        type: "error",
+        duration: 3000,
+      });
+
       setLoading(false);
     }
   }
@@ -121,16 +172,16 @@ export default function LoginForm() {
         >
           {/* Display Success/Error Message */}
           {formStatus.message && (
-              <div
-                className={`text-center text-sm p-2 rounded-md ${
-                  formStatus.success ?
-                    "bg-green-200 text-green-700"
-                    : "bg-red-200 text-red-700"
-                }`}
-              >
-                {formStatus.message}
-              </div>
-            )}
+            <div
+              className={`text-center text-sm p-2 rounded-md ${
+                formStatus.success
+                  ? "bg-green-200 text-green-700"
+                  : "bg-red-200 text-red-700"
+              }`}
+            >
+              {formStatus.message}
+            </div>
+          )}
           <FormField
             control={loginForm.control}
             name="email"
@@ -143,7 +194,7 @@ export default function LoginForm() {
                     <Input
                       placeholder="Enter your email"
                       {...field}
-                      className="bg-black border-orange-400 pl-10 text-white" 
+                      className="bg-black border-orange-400 pl-10 text-white"
                     />
                   </div>
                 </FormControl>

@@ -8,6 +8,7 @@ import GamesPage from "@/pages/Games";
 import WalletPage from "@/pages/Wallet";
 import HistoryPage from "@/pages/History";
 import EmailVerificationPage from "@/pages/Auth/EmailVerification";
+import ResetPasswordPage from "@/pages/Auth/ResetPassword";
 
 const routes: RouteObject[] = [
   {
@@ -43,6 +44,14 @@ const routes: RouteObject[] = [
     element: (
       <PublicRoute>
         <EmailVerificationPage />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: "/reset-password",
+    element: (
+      <PublicRoute>
+        <ResetPasswordPage />
       </PublicRoute>
     ),
   },
