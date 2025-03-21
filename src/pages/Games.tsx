@@ -21,7 +21,7 @@ function GamesPage() {
       
       <div className="space-y-4">
         {/* Live match - Premier League */}
-        <MatchCardLive />
+        {/* <MatchCardLive /> */}
 
         {/* Upcoming match */}
         <MatchCardUpcoming />

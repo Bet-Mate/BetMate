@@ -1,120 +1,187 @@
+import { fetchMatches, selectAllMatches } from "@/store/slices/gamesSlice";
+import { AppDispatch } from "@/store/store";
+import { Clock } from "lucide-react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+interface Team {
+  name: string;
+  logo: string;
+}
+
+interface League {
+  name: string;
+  logo: string;
+}
+
+interface DisplayMatch {
+  id: string;
+  time: string;
+  league: League;
+  team1: Team;
+  team2: Team;
+  odds: {
+    '1': string;
+    'X': string;
+    '2': string;
+  };
+}
+
 export default function MatchCardUpcoming() {
+  const dispatch = useDispatch<AppDispatch>()
+  const matches = useSelector(selectAllMatches);
+  const loading = useSelector((state: any) => state.matches.loading);
+  const error = useSelector((state: any) => state.matches.error);
+
+  useEffect(() => {
+      dispatch(fetchMatches());
+    }, [dispatch]);
+
+    // Helper function to format commence time
+  const formatMatchTime = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      const today = new Date();
+      
+      // Check if the match is today
+      if (date.toDateString() === today.toDateString()) {
+        return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      
+      // Check if the match is tomorrow
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      if (date.toDateString() === tomorrow.toDateString()) {
+        return `Tomorrow, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      
+      // Otherwise show date and time
+      return `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } catch (e) {
+      return 'Invalid date';
+    }
+  };
+
+  // Helper to format match data for display
+  const formatMatchForDisplay = (match: any): DisplayMatch => {
+    // Extract league from match data
+    const league = {
+      name: match.league.title,
+      logo: `/leagues/${match.league.key}.jpg`
+    };
+
+    // Extract teams and add logos
+    const team1 = {
+      name: match.match.homeTeam,
+      logo: match.homeTeamLogo || `/Teams/${match.league.title}/${match.match.homeTeam}.png`
+    };
+
+    const team2 = {
+      name: match.match.awayTeam,
+      logo: match.awayTeamLogo || `/Teams/${match.league.title}/${match.match.awayTeam}.png`
+    };
+
+    // Extract odds with null safety
+    const odds = match.odds ? {
+      '1': match.odds.homeWin ? match.odds.homeWin.toFixed(2) : '-',
+      'X': match.odds.draw ? match.odds.draw.toFixed(2) : '-',
+      '2': match.odds.awayWin ? match.odds.awayWin.toFixed(2) : '-'
+    } : { '1': '-', 'X': '-', '2': '-' };
+
+    return {
+      id: match.id,
+      time: formatMatchTime(match.match.commenceTime),
+      league,
+      team1,
+      team2,
+      odds
+    };
+  };
+
+  if (loading) {
+    return <div className="text-center mt-8">Loading matches...</div>;
+  }
+
+  // Fixed error handling to use the error message or fallback
+  if (error) {
+    const errorMessage = typeof error === 'string' 
+      ? error 
+      : error.message || (typeof error === 'object' ? JSON.stringify(error) : String(error));
+    return <div className="text-center mt-8 text-red-500">Error: {errorMessage}</div>;
+  }
+
   return (
     <>
-      <div className="p-4 rounded-lg bg-[#1e1e1e] text-white border border-gray-800">
-        {/* Match header with league info */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center">
-            <img
-              src="/leagues/seriea.jpg"
-              alt="Serie A"
-              width={40}
-              height={40}
-              className="mr-2 rounded-full"
-            />
-            <span className="text-sm font-medium">Serie A</span>
-          </div>
+      {matches.length === 0 ? (
+        <div className="text-center p-8 bg-[#2C2C2E] rounded-xl">
+          <p className="text-gray-400">No upcoming matches available</p>
         </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {matches.map((match) => {
+            const displayMatch = formatMatchForDisplay(match);
+            
+            return (
+              <div key={displayMatch.id} className="bg-[#2C2C2E] rounded-xl p-4 hover:bg-[#3C3C3E] transition-colors">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <img 
+                      src={displayMatch.league.logo} 
+                      alt={displayMatch.league.name} 
+                      className="w-6 h-6"
+                    />
+                    <span className="text-sm text-gray-300">
+                      {displayMatch.league.name}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-400">
+                    <Clock className="w-4 h-4 inline-block mr-1" />
+                    {displayMatch.time}
+                  </span>
+                </div>
 
-        {/* Teams and time */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center flex-1">
-            <img
-              src="https://logowik.com/content/uploads/images/651_juventus_2017_logo.jpg"
-              alt="Juventus"
-              width={32}
-              height={32}
-              className="mr-3 rounded-full"
-            />
-            <span className="font-medium">Juventus</span>
-          </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={displayMatch.team1.logo} 
+                      alt={displayMatch.team1.name} 
+                      className="w-8 h-8"
+                    />
+                    <span className="font-medium text-white">
+                      {displayMatch.team1.name}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-400">vs</span>
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium text-white">
+                      {displayMatch.team2.name}
+                    </span>
+                    <img 
+                      src={displayMatch.team2.logo} 
+                      alt={displayMatch.team2.name} 
+                      className="w-8 h-8"
+                    />
+                  </div>
+                </div>
 
-          <div className="px-3 py-1 text-sm font-medium text-center">19:45</div>
-
-          <div className="flex items-center justify-end flex-1">
-            <span className="font-medium">AC Milan</span>
-            <img
-              src="https://seeklogo.com/images/A/ac-milan-logo-6C6FFEFCF1-seeklogo.com.png"
-              alt="AC Milan"
-              width={32}
-              height={32}
-              className="ml-3 rounded-full"
-            />
-          </div>
+                <div className="flex gap-2 mt-4">
+                  {Object.entries(displayMatch.odds).map(([key, value]) => (
+                    <button
+                      key={key}
+                      className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors"
+                    >
+                      <div className="text-xs mb-1 text-gray-400">
+                        {key}
+                      </div>
+                      <div className="font-medium">{value}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
-
-        {/* Betting odds */}
-        <div className="grid grid-cols-3 gap-2">
-          <button className="p-3 text-center rounded bg-[#252525] hover:bg-[#303030]">
-            <div className="text-xs text-gray-400">1</div>
-            <div className="text-lg font-bold">2.4</div>
-          </button>
-          <button className="p-3 text-center rounded bg-[#252525] hover:bg-[#303030]">
-            <div className="text-xs text-gray-400">X</div>
-            <div className="text-lg font-bold">3.1</div>
-          </button>
-          <button className="p-3 text-center rounded bg-[#252525] hover:bg-[#303030]">
-            <div className="text-xs text-gray-400">2</div>
-            <div className="text-lg font-bold">2.9</div>
-          </button>
-        </div>
-      </div>
-
-      <div className="p-4 rounded-lg bg-[#1e1e1e] text-white border border-gray-800">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center">
-            <img
-              src="/leagues/champs.jpg"
-              alt="Champions League"
-              width={40}
-              height={40}
-              className="mr-2 rounded-full"
-            />
-            <span className="text-sm font-medium">Champions League</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center flex-1">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg/1024px-Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg.png"
-              alt="Bayern Munich"
-              width={32}
-              height={32}
-              className="mr-3 rounded-full"
-            />
-            <span className="font-medium">Bayern Munich</span>
-          </div>
-
-          <div className="px-3 py-1 text-sm font-medium text-center">20:00</div>
-
-          <div className="flex items-center justify-end flex-1">
-            <span className="font-medium">PSG</span>
-            <img
-              src="https://upload.wikimedia.org/wikipedia/fr/thumb/8/86/Paris_Saint-Germain_Logo.svg/2048px-Paris_Saint-Germain_Logo.svg.png"
-              alt="PSG"
-              width={32}
-              height={32}
-              className="ml-3 rounded-full"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-2">
-          <button className="p-3 text-center rounded bg-[#252525] hover:bg-[#303030]">
-            <div className="text-xs text-gray-400">1</div>
-            <div className="text-lg font-bold">1.8</div>
-          </button>
-          <button className="p-3 text-center rounded bg-[#252525] hover:bg-[#303030]">
-            <div className="text-xs text-gray-400">X</div>
-            <div className="text-lg font-bold">3.5</div>
-          </button>
-          <button className="p-3 text-center rounded bg-[#252525] hover:bg-[#303030]">
-            <div className="text-xs text-gray-400">2</div>
-            <div className="text-lg font-bold">4.2</div>
-          </button>
-        </div>
-      </div>
+      )}
     </>
   );
 }
