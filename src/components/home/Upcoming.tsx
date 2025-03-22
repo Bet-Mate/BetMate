@@ -156,7 +156,7 @@ export default function UpcomingMatches() {
         <h2 className="text-xl font-semibold text-white">
           Upcoming Matches
         </h2>
-        <Link to="/matches" className="text-sm text-orange-400 hover:underline">
+        <Link to="/games" className="text-sm text-orange-400 hover:underline">
           View All
         </Link>
       </div>
