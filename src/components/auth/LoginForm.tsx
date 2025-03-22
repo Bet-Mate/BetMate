@@ -13,13 +13,14 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Eye, EyeOff, Key, User } from "lucide-react";
-import { loginUser } from "@/services/AuthService";
+import { getUserProfile, loginUser } from "@/services/AuthService";
 import { toastNotifier } from "@/utils/toastNotifier";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "@/store/slices/authSlice";
+import { login, updateUserProfile } from "@/store/slices/authSlice";
 import { GridLoader } from "react-spinners";
 import { AxiosError } from "axios";
+import { fetchUserProfile } from "@/utils/profileUtils";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -123,6 +124,28 @@ export default function LoginForm() {
           accessToken: response.accessToken,
         })
       );
+      try {
+        const { user: fullProfile, error: profileError } =
+          await getUserProfile();
+
+        if (profileError) {
+          console.warn("Could not fetch complete profile:", profileError);
+          toastNotifier({
+            message: `Failed to fetch user profile: ${profileError}`,
+            type: "error",
+            duration: 3000,
+          })
+        } else if (fullProfile) {
+          dispatch(updateUserProfile(fullProfile));
+        }
+      } catch (profileError) {
+        console.warn("Error fetching full profile:", profileError);
+        toastNotifier({
+          message: `Failed to fetch user profile: ${profileError}`,
+          type: "error",
+          duration: 3000,
+        });
+      }
       toastNotifier({
         message: "Logged in successfully!",
         type: "success",
@@ -132,7 +155,10 @@ export default function LoginForm() {
       // localStorage.setItem("token", response.accessToken);
       console.log("Login response:", response);
 
-      setFormStatus({ success: true, message: "Logged in successfully ... redirecting!" });
+      setFormStatus({
+        success: true,
+        message: "Logged in successfully ... redirecting!",
+      });
       setLoading(false);
 
       setTimeout(() => {

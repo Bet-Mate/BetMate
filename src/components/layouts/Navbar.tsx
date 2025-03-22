@@ -23,7 +23,7 @@ const Navbar = () => {
           {/* Balance */}
           <div className="flex items-center gap-2 bg-[#2C2C2E] px-4 py-2 rounded-lg">
             <Wallet className="w-4 h-4 text-orange-500" />
-            <span className="text-white font-medium">$1,234.56</span>
+            <span className="text-white font-medium">${user.balance}</span>
           </div>
 
           {/* Notifications */}
