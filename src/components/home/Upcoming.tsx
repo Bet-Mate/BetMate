@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Clock } from 'lucide-react';
 import { AppDispatch, RootState } from '@/store/store';
-import { fetchMatches, selectHomePageMatches, selectAllMatches } from '@/store/slices/gamesSlice';
+import { selectAllMatches, fetchAllMatches, selectMatchesStatus, selectMatchesError } from '@/store/slices/gamesSlice';
 
 interface Team {
   name: string;
@@ -18,43 +18,33 @@ interface League {
 interface DisplayMatch {
   id: string;
   time: string;
+  rawTime: string;
   league: League;
   team1: Team;
   team2: Team;
   odds: {
-    '1': string;
-    'X': string;
-    '2': string;
+    homeWin: string;
+    draw: string;
+    awayWin: string;
+    overPoint?: number;  // Changed from overPoints to overPoint to match usage
+    over?: string;
+    under?: string;
   };
 }
 
 export default function UpcomingMatches() {
   const dispatch = useDispatch<AppDispatch>();
-  // Use our optimized selector
-  const matches = useSelector(selectHomePageMatches);
-  // Also get all matches to help with debugging
-  const allMatches = useSelector(selectAllMatches);
-  const loading = useSelector((state: RootState) => state.matches.loading);
-  const error = useSelector((state: RootState) => state.matches.error);
+  const matches = useSelector((state: RootState) => selectAllMatches(state));
+  const status = useSelector((state: RootState) => selectMatchesStatus(state));
+  const error = useSelector((state: RootState) => selectMatchesError(state));
 
   useEffect(() => {
-    dispatch(fetchMatches());
-  }, [dispatch]);
-
-  // Debug logging
-  useEffect(() => {
-    if (allMatches.length > 0) {
-      // Log unique leagues
-      const uniqueLeagues = new Set(allMatches.map(match => match.league.key));
-      console.log(`Found ${uniqueLeagues.size} unique leagues in ${allMatches.length} matches`);
-      console.log('League distribution in selected matches:', 
-        matches.reduce((acc: Record<string, number>, match) => {
-          const leagueKey = match.league.key;
-          acc[leagueKey] = (acc[leagueKey] || 0) + 1;
-          return acc;
-        }, {}));
+    // Only fetch if we haven't already or if there was an error
+    if (status === 'idle') {
+      console.log('Fetching matches...');
+      dispatch(fetchAllMatches());
     }
-  }, [allMatches, matches]);
+  }, [status, dispatch]);
 
   // Helper function to format commence time
   const formatMatchTime = (dateString: string): string => {
@@ -101,15 +91,26 @@ export default function UpcomingMatches() {
     };
 
     // Extract odds with null safety
-    const odds = match.odds ? {
-      '1': match.odds.homeWin ? match.odds.homeWin.toFixed(2) : '-',
-      'X': match.odds.draw ? match.odds.draw.toFixed(2) : '-',
-      '2': match.odds.awayWin ? match.odds.awayWin.toFixed(2) : '-'
-    } : { '1': '-', 'X': '-', '2': '-' };
+    const odds = {
+      homeWin: match.odds?.homeWin ? match.odds.homeWin.toFixed(2) : '-',
+      draw: match.odds?.draw ? match.odds.draw.toFixed(2) : '-',
+      awayWin: match.odds?.awayWin ? match.odds.awayWin.toFixed(2) : '-',
+      overPoint: undefined,
+      over: undefined,
+      under: undefined
+    };
+
+    // Add over/under if available
+    if (match.odds?.overUnder) {
+      odds.overPoint = match.odds.overUnder.point;
+      odds.over = match.odds.overUnder.over.toFixed(2);
+      odds.under = match.odds.overUnder.under.toFixed(2);
+    }
 
     return {
       id: match.id,
       time: formatMatchTime(match.match.commenceTime),
+      rawTime: match.match.commenceTime, 
       league,
       team1,
       team2,
@@ -117,15 +118,35 @@ export default function UpcomingMatches() {
     };
   };
 
-  if (loading) {
-    return <div className="text-center mt-8">Loading matches...</div>;
+  // Get the 10 most imminent matches, sorted by commence time
+  const upcomingMatches = useMemo(() => {
+    if (!matches || matches.length === 0) return [];
+    
+    // Filter out matches that already started
+    const now = new Date();
+    const futureMatches = matches.filter(match => 
+      new Date(match.match.commenceTime) > now
+    );
+    
+    // Format and sort matches by commence time
+    return futureMatches
+      .map(formatMatchForDisplay)
+      .sort((a, b) => new Date(a.rawTime).getTime() - new Date(b.rawTime).getTime())
+      .slice(0, 10); // Get only the first 10
+  }, [matches]);
+
+  if (status === 'loading') {
+    return (
+      <div className="text-center p-8 bg-[#2C2C2E] rounded-xl animate-pulse">
+        <p className="text-gray-400">Loading upcoming matches...</p>
+      </div>
+    );
   }
 
-  // Fixed error handling to use the error message or fallback
   if (error) {
     const errorMessage = typeof error === 'string' 
       ? error 
-      : error.message || (typeof error === 'object' ? JSON.stringify(error) : String(error));
+      : error || (typeof error === 'object' ? JSON.stringify(error) : String(error));
     return <div className="text-center mt-8 text-red-500">Error: {errorMessage}</div>;
   }
 
@@ -140,83 +161,105 @@ export default function UpcomingMatches() {
         </Link>
       </div>
 
-      {matches.length === 0 ? (
+      {upcomingMatches.length === 0 ? (
         <div className="text-center p-8 bg-[#2C2C2E] rounded-xl">
           <p className="text-gray-400">No upcoming matches available</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {matches.map((match) => {
-            const displayMatch = formatMatchForDisplay(match);
-            
-            return (
-              <div key={displayMatch.id} className="bg-[#2C2C2E] rounded-xl p-4 hover:bg-[#3C3C3E] transition-colors">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <img 
-                      src={displayMatch.league.logo} 
-                      alt={displayMatch.league.name} 
-                      className="w-6 h-6"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder-league.jpg';
-                      }}
-                    />
-                    <span className="text-sm text-gray-300">
-                      {displayMatch.league.name}
-                    </span>
-                  </div>
-                  <span className="text-sm text-gray-400">
-                    <Clock className="w-4 h-4 inline-block mr-1" />
-                    {displayMatch.time}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {upcomingMatches.map((match) => (
+            <div key={match.id} className="bg-[#2C2C2E] rounded-xl p-4 hover:bg-[#3C3C3E] transition-colors">
+              {/* Header with league and time */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <img 
+                    src={match.league.logo} 
+                    alt={match.league.name} 
+                    className="w-6 h-6 rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = '/placeholder-league.jpg';
+                    }}
+                  />
+                  <span className="text-sm text-gray-300">
+                    {match.league.name}
                   </span>
                 </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <img 
-                      src={displayMatch.team1.logo} 
-                      alt={displayMatch.team1.name} 
-                      className="w-8 h-8"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder-team.jpg';
-                      }}
-                    />
-                    <span className="font-medium text-white">
-                      {displayMatch.team1.name}
-                    </span>
-                  </div>
-                  <span className="text-sm text-gray-400">vs</span>
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium text-white">
-                      {displayMatch.team2.name}
-                    </span>
-                    <img 
-                      src={displayMatch.team2.logo} 
-                      alt={displayMatch.team2.name} 
-                      className="w-8 h-8"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder-team.jpg';
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-2 mt-4">
-                  {Object.entries(displayMatch.odds).map(([key, value]) => (
-                    <button
-                      key={key}
-                      className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors"
-                    >
-                      <div className="text-xs mb-1 text-gray-400">
-                        {key}
-                      </div>
-                      <div className="font-medium">{value}</div>
-                    </button>
-                  ))}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-400">
+                    <Clock className="w-4 h-4 inline-block mr-1" />
+                    {match.time}
+                  </span>
                 </div>
               </div>
-            );
-          })}
+
+              {/* Teams */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3 w-2/5">
+                  {/* <img 
+                    src={match.team1.logo} 
+                    alt={match.team1.name} 
+                    className="w-8 h-8 rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = '/placeholder-team.jpg';
+                    }}
+                  /> */}
+                  <span className="font-medium text-white truncate">
+                    {match.team1.name}
+                  </span>
+                </div>
+                <div className="px-2 py-1 bg-[#3C3C3E] rounded-lg">
+                  <span className="text-sm text-gray-400">VS</span>
+                </div>
+                <div className="flex items-center gap-3 w-2/5 justify-end">
+                  <span className="font-medium text-white truncate">
+                    {match.team2.name}
+                  </span>
+                  {/* <img 
+                    src={match.team2.logo} 
+                    alt={match.team2.name} 
+                    className="w-8 h-8 rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = '/placeholder-team.jpg';
+                    }}
+                  /> */}
+                </div>
+              </div>
+
+              {/* Main betting options: 1-X-2 */}
+              <div className="flex gap-2 mb-3">
+                <button className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors">
+                  <div className="text-xs mb-1 text-gray-400">1</div>
+                  <div className="font-medium">{match.odds.homeWin}</div>
+                </button>
+                <button className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors">
+                  <div className="text-xs mb-1 text-gray-400">X</div>
+                  <div className="font-medium">{match.odds.draw}</div>
+                </button>
+                <button className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors">
+                  <div className="text-xs mb-1 text-gray-400">2</div>
+                  <div className="font-medium">{match.odds.awayWin}</div>
+                </button>
+              </div>
+
+              {/* Over/Under options if available */}
+              {match.odds.overPoint && (
+                <div className="flex gap-2">
+                  <button className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors">
+                    <div className="text-xs mb-1 text-gray-400">
+                      Over {match.odds.overPoint}
+                    </div>
+                    <div className="font-medium">{match.odds.over}</div>
+                  </button>
+                  <button className="flex-1 p-2 rounded-lg text-center bg-[#1C1C1E] hover:bg-orange-500 text-white transition-colors">
+                    <div className="text-xs mb-1 text-gray-400">
+                      Under {match.odds.overPoint}
+                    </div>
+                    <div className="font-medium">{match.odds.under}</div>
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </section>
