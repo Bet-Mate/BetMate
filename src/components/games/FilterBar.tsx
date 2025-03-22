@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { CalendarDays } from "lucide-react"
+import { CalendarDays } from "lucide-react";
 
 interface FilterBarProps {
-  activeTab: string
-  setActiveTab: (tab: string) => void
-  selectedLeague: string
-  setSelectedLeague: (league: string) => void
-  selectedDate: string
-  setSelectedDate: (date: string) => void
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  selectedLeague: string;
+  setSelectedLeague: (league: string) => void;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
 }
 
 export default function FilterBar({
@@ -19,40 +19,57 @@ export default function FilterBar({
   selectedDate,
   setSelectedDate,
 }: FilterBarProps) {
-  // Available leagues for filter
+  // Available leagues for filter with exact keys matching backend data
   const leagues = [
     { id: "all", name: "All Leagues" },
-    { id: "premier-league", name: "Premier League" },
-    { id: "la-liga", name: "La Liga" },
-    { id: "champions-league", name: "Champions League" },
-    { id: "serie-a", name: "Serie A" },
-  ]
+    { id: "soccer-epl", name: "Premier League" },
+    { id: "soccer-spain-la-liga", name: "La Liga" },
+    { id: "soccer-italy-serie-a", name: "Serie A" },
+    { id: "soccer-germany-bundesliga", name: "Bundesliga" },
+    { id: "soccer-france-ligue-one", name: "Ligue 1"},
+    { id: "soccer-uefa-champs-league", name: "Champions League" },
+    { id: "soccer-uefa-europa-league", name: "Europa League" },
+    { id: "soccer-uefa-nations-league", name: "Nations League" },
+  ];
 
   // Available dates for filter
   const dates = [
+    { id: "all", name: "All Dates" },
     { id: "today", name: "Today" },
     { id: "tomorrow", name: "Tomorrow" },
     { id: "this-week", name: "This Week" },
-  ]
+  ];
 
   return (
     <div className="flex flex-wrap items-center text-white justify-between mb-6 gap-y-4">
       <div className="flex items-center space-x-2">
         <button
           onClick={() => setActiveTab("all")}
-          className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === "all" ? "bg-[#ff7b26]" : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"}`}
+          className={`px-4 py-2 text-sm font-medium rounded-md ${
+            activeTab === "all"
+              ? "bg-[#ff7b26]"
+              : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"
+          }`}
         >
           All
         </button>
         <button
           onClick={() => setActiveTab("live")}
-          className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === "live" ? "bg-[#ff7b26]" : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"}`}
+          className={`px-4 py-2 text-sm font-medium rounded-md ${
+            activeTab === "live"
+              ? "bg-[#ff7b26]"
+              : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"
+          }`}
         >
           Live
         </button>
         <button
           onClick={() => setActiveTab("upcoming")}
-          className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === "upcoming" ? "bg-[#ff7b26]" : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"}`}
+          className={`px-4 py-2 text-sm font-medium rounded-md ${
+            activeTab === "upcoming"
+              ? "bg-[#ff7b26]"
+              : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"
+          }`}
         >
           Upcoming
         </button>
@@ -80,7 +97,12 @@ export default function FilterBar({
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
@@ -107,12 +129,16 @@ export default function FilterBar({
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
