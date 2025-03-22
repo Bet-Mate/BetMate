@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { login, updateUserProfile } from "@/store/slices/authSlice";
 import { GridLoader } from "react-spinners";
 import { AxiosError } from "axios";
-import { fetchUserProfile } from "@/utils/profileUtils";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),

@@ -5,12 +5,15 @@ import { Wallet, ArrowDownCircle, ArrowUpCircle } from "lucide-react"
 import TransactionHistory from "@/components/wallet/transaction-history" 
 import DepositForm from "@/components/wallet/deposit-form"
 import WithdrawForm from "@/components/wallet/withdraw-form"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store/store"
 
 export default function WalletPage() {
   const [activeTab, setActiveTab] = useState("deposit")
+  const user = useSelector((state: RootState) => state.auth.user)
 
   return (
-    <div className="flex-1 h-screen pl-[18rem] pt-20 p-6 bg-[#121212] text-white">
+    <div className="flex-1 h-screen pl-[18rem] pt-20 p-6 bg-[#121212] text-white overflow-y-auto">
       <h1 className="mb-6 text-2xl font-bold flex items-center">
         <Wallet className="mr-2" /> My Wallet
       </h1>
@@ -19,7 +22,7 @@ export default function WalletPage() {
         <div className="md:col-span-2">
           <div className="bg-[#1e1e1e] rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold mb-4">Balance</h2>
-            <div className="text-4xl font-bold text-[#ff7b26]">$1,250.00</div>
+            <div className="text-4xl font-bold text-[#ff7b26]">$ {user?.balance}</div>
           </div>
 
           <div className="bg-[#1e1e1e] rounded-lg p-6">
@@ -46,8 +49,7 @@ export default function WalletPage() {
         </div>
 
         <div className="md:col-span-1">
-          <div className="bg-[#1e1e1e] rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Transaction History</h2>
+          <div className="bg-[#1e1e1e] rounded-lg p-6 flex flex-col h-full max-h-[calc(100vh-160px)]">
             <TransactionHistory />
           </div>
         </div>
@@ -55,4 +57,3 @@ export default function WalletPage() {
     </div>
   )
 }
-
