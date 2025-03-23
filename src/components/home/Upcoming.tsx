@@ -76,7 +76,7 @@ export default function UpcomingMatches() {
     // Extract league from match data
     const league = {
       name: match.league.title,
-      logo: `/leagues/${match.league.key}.jpg`
+      logo: `/leagues/${match.league.key}.png`
     };
 
     // Extract teams and add logos

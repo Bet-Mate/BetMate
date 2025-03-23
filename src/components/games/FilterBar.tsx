@@ -21,15 +21,15 @@ export default function FilterBar({
 }: FilterBarProps) {
   // Available leagues for filter with exact keys matching backend data
   const leagues = [
-    { id: "all", name: "All Leagues" },
-    { id: "soccer-epl", name: "Premier League" },
-    { id: "soccer-spain-la-liga", name: "La Liga" },
-    { id: "soccer-italy-serie-a", name: "Serie A" },
-    { id: "soccer-germany-bundesliga", name: "Bundesliga" },
-    { id: "soccer-france-ligue-one", name: "Ligue 1"},
-    { id: "soccer-uefa-champs-league", name: "Champions League" },
-    { id: "soccer-uefa-europa-league", name: "Europa League" },
-    { id: "soccer-uefa-nations-league", name: "Nations League" },
+    { key: "all", name: "All Leagues" },
+    { key: "soccer_epl", name: "Premier League" },
+    { key: "soccer_spain_la_liga", name: "La Liga" },
+    { key: "soccer_italy_serie_a", name: "Serie A" },
+    { key: "soccer_germany_bundesliga", name: "Bundesliga" },
+    { key: "soccer_france_ligue_one", name: "Ligue 1"},
+    { key: "soccer_uefa_champs_league", name: "Champions League" },
+    { key: "soccer_uefa_europa_league", name: "Europa League" },
+    { key: "soccer_uefa_nations_league", name: "Nations League" },
   ];
 
   // Available dates for filter
@@ -84,7 +84,7 @@ export default function FilterBar({
             className="px-4 py-2 pr-8 text-sm font-medium rounded-md appearance-none bg-[#2a2a2a] focus:ring-1 focus:ring-[#ff7b26] focus:outline-none"
           >
             {leagues.map((league) => (
-              <option key={league.id} value={league.id}>
+              <option key={league.key} value={league.key}>
                 {league.name}
               </option>
             ))}
