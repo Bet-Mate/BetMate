@@ -116,3 +116,68 @@ export const withdraw = async (amount: number, withdrawalMethod: string) => {
     throw err;
   }
 };
+
+// Fetch all transactions (admin only)
+export const getAllTransactions = async () => {
+  try {
+    const storedAuth = localStorage.getItem("auth");
+    const token = storedAuth ? JSON.parse(storedAuth).accessToken : null;
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await apiClient.get("/payment/all", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("All transactions:", response.data[0]);
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching transactions:", err);
+    throw err;
+  }
+};
+
+// Process a withdrawal (admin only)
+export const processWithdrawal = async (transactionId: string) => {
+  try {
+    const storedAuth = localStorage.getItem("auth");
+    const token = storedAuth ? JSON.parse(storedAuth).accessToken : null;
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await apiClient.post(`/payment/withdraw/process/${transactionId}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error processing withdrawal:", err);
+    throw err;
+  }
+};
+
+// Cancel a withdrawal
+export const cancelWithdrawal = async (transactionId: string) => {
+  try {
+    const storedAuth = localStorage.getItem("auth");
+    const token = storedAuth ? JSON.parse(storedAuth).accessToken : null;
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await apiClient.post(`/payment/withdraw/cancel/${transactionId}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error cancelling withdrawal:", err);
+    throw err;
+  }
+};

@@ -1,10 +1,4 @@
-import {
-  History,
-  Home,
-  LogOut,
-  Volleyball,
-  Wallet,
-} from "lucide-react";
+import { History, Home, LogOut, Volleyball, Wallet } from "lucide-react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,15 +12,23 @@ const guestMenu = [
 const authMenu = [
   { icon: Home, label: "Home", path: "/" },
   { icon: Volleyball, label: "Games", path: "/games" },
-  { icon: Home, label: "Profile", path: "/profile" },
   { icon: Wallet, label: "My Wallet", path: "/my-wallet" },
   { icon: History, label: "Betting History", path: "/history" },
+  { icon: Home, label: "Profile", path: "/profile" },
+];
+
+const adminMenu = [
+  { icon: Home, label: "Home", path: "/" },
+  { icon: Wallet, label: "Transactions", path: "/transactions" },
 ];
 
 const Sidebar = () => {
   const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
+  const isAdmin = useSelector(
+    (state: any) => state.auth.user?.role === "admin"
+  );
   const dispatch = useDispatch();
-  const menuItems = isAuth ? authMenu : guestMenu;
+  const menuItems = isAuth ? (isAdmin ? adminMenu : authMenu) : guestMenu;
 
   async function handleLogout() {
     dispatch(logout());
@@ -66,77 +68,81 @@ const Sidebar = () => {
               </button>
             </Link>
           ))}
-
         </div>
 
-        <div className="mt-8">
-          <h3 className="text-xs font-medium text-gray-500 uppercase px-3 mb-3">
-            Popular Leagues
-          </h3>
-          <div className="space-y-1">
-            {[
-              {
-                name: "Premier League",
-                country: "England",
-                logo: "https://media.api-sports.io/football/leagues/39.png",
-              },
-              {
-                name: "La Liga",
-                country: "Spain",
-                logo: "https://media.api-sports.io/football/leagues/140.png",
-              },
-              {
-                name: "Champions League",
-                country: "Europe",
-                logo: "https://media.api-sports.io/football/leagues/2.png",
-              },
-              {
-                name: "Serie A",
-                country: "Italy",
-                logo: "https://media.api-sports.io/football/leagues/135.png",
-              },
-            ].map((league) => (
-              <button
-                key={league.name}
-                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#2C2C2E]"
-              >
-                <img
-                  src={league.logo}
-                  alt={league.name}
-                  className="w-6 h-6 object-contain"
-                />
-                <div>
-                  <div className="text-sm text-gray-300">{league.name}</div>
-                  <div className="text-xs text-gray-500">{league.country}</div>
-                </div>
-              </button>
-            ))}
+        {!isAuth && (
+          <div className="mt-8">
+            <h3 className="text-xs font-medium text-gray-500 uppercase px-3 mb-3">
+              Popular Leagues
+            </h3>
+            <div className="space-y-1">
+              {[
+                {
+                  name: "Premier League",
+                  country: "England",
+                  logo: "https://media.api-sports.io/football/leagues/39.png",
+                },
+                {
+                  name: "La Liga",
+                  country: "Spain",
+                  logo: "https://media.api-sports.io/football/leagues/140.png",
+                },
+                {
+                  name: "Champions League",
+                  country: "Europe",
+                  logo: "https://media.api-sports.io/football/leagues/2.png",
+                },
+                {
+                  name: "Serie A",
+                  country: "Italy",
+                  logo: "https://media.api-sports.io/football/leagues/135.png",
+                },
+              ].map((league) => (
+                <button
+                  key={league.name}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#2C2C2E]"
+                >
+                  <img
+                    src={league.logo}
+                    alt={league.name}
+                    className="w-6 h-6 object-contain"
+                  />
+                  <div>
+                    <div className="text-sm text-gray-300">{league.name}</div>
+                    <div className="text-xs text-gray-500">
+                      {league.country}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-
-        {isAuth ? (<div className="mt-8">
-          <button
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-[#2C2C2E]"
-            onClick={handleLogout}
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="text-sm">Logout</span>
-          </button>
-        </div>) : (
-
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-[#2C2C2E] rounded-lg p-4">
-            <h4 className="text-white text-sm font-medium mb-2">
-              Join BetMate Today
-            </h4>
-            <p className="text-gray-400 text-sm mb-3">
-              Get 100% bonus on your first deposit!
-            </p>
-            <button className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors">
-              Register Now
+        )}
+        {isAuth ? (
+          <div className="mt-8">
+            <button
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-[#2C2C2E]"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="text-sm">Logout</span>
             </button>
           </div>
-        </div>)}
+        ) : (
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="bg-[#2C2C2E] rounded-lg p-4">
+              <h4 className="text-white text-sm font-medium mb-2">
+                Join BetMate Today
+              </h4>
+              <p className="text-gray-400 text-sm mb-3">
+                Get 100% bonus on your first deposit!
+              </p>
+              <button className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                Register Now
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

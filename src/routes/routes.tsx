@@ -10,6 +10,7 @@ import HistoryPage from "@/pages/History";
 import EmailVerificationPage from "@/pages/Auth/EmailVerification";
 import ResetPasswordPage from "@/pages/Auth/ResetPassword";
 import PaymentReturn from "@/components/wallet/transaction-return";
+import AdminTransactionsPage from "@/pages/Transactions";
 
 const routes: RouteObject[] = [
   {
@@ -81,6 +82,14 @@ const routes: RouteObject[] = [
     element: (
       <ProtectedRoute>
         <PaymentReturn/>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "transactions",
+    element: (
+      <ProtectedRoute>
+        <AdminTransactionsPage/>
       </ProtectedRoute>
     )
   }
