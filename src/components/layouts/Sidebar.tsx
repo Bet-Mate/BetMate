@@ -3,6 +3,9 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/slices/authSlice";
+import { useEffect, useState } from "react";
+import { fetchLeagues } from "@/services/EventsService";
+import { toastNotifier } from "@/utils/toastNotifier";
 
 const guestMenu = [
   { icon: Home, label: "Home", path: "/" },
@@ -22,6 +25,14 @@ const adminMenu = [
   { icon: Wallet, label: "Transactions", path: "/transactions" },
 ];
 
+interface League {
+  key: string;
+  group: string;
+  title: string;
+  description: string;
+  active: boolean;
+  has_outrights: boolean;
+}
 const Sidebar = () => {
   const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
   const isAdmin = useSelector(
@@ -33,6 +44,28 @@ const Sidebar = () => {
   async function handleLogout() {
     dispatch(logout());
   }
+  const [leagues, setLeagues] = useState<League[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getLeagues = async () => {
+      try {
+        const response = await fetchLeagues();
+        setLeagues(response);
+      } catch (error) {
+        console.error("Failed to fetch leagues:", error);
+        toastNotifier({
+          message: "Failed to fetch leagues",
+          type: "error",
+          duration: 3000,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getLeagues();
+  }, []);
 
   return (
     <div className="w-64 h-screen fixed left-0 top-0 bg-[#181818] text-gray-400">
@@ -73,48 +106,39 @@ const Sidebar = () => {
         {!isAuth && (
           <div className="mt-8">
             <h3 className="text-xs font-medium text-gray-500 uppercase px-3 mb-3">
-              Popular Leagues
+              Available Leagues
             </h3>
             <div className="space-y-1">
-              {[
-                {
-                  name: "Premier League",
-                  country: "England",
-                  logo: "https://media.api-sports.io/football/leagues/39.png",
-                },
-                {
-                  name: "La Liga",
-                  country: "Spain",
-                  logo: "https://media.api-sports.io/football/leagues/140.png",
-                },
-                {
-                  name: "Champions League",
-                  country: "Europe",
-                  logo: "https://media.api-sports.io/football/leagues/2.png",
-                },
-                {
-                  name: "Serie A",
-                  country: "Italy",
-                  logo: "https://media.api-sports.io/football/leagues/135.png",
-                },
-              ].map((league) => (
-                <button
-                  key={league.name}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#2C2C2E]"
-                >
-                  <img
-                    src={league.logo}
-                    alt={league.name}
-                    className="w-6 h-6 object-contain"
-                  />
-                  <div>
-                    <div className="text-sm text-gray-300">{league.name}</div>
-                    <div className="text-xs text-gray-500">
-                      {league.country}
+              {isLoading ? (
+                <div className="px-3 py-2 text-sm text-gray-400">
+                  Loading leagues...
+                </div>
+              ) : leagues.length > 0 ? (
+                leagues.map((league) => (
+                  <div
+                    key={league.title}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#2C2C2E]"
+                  >
+                    <img
+                      src={`/leagues/${league.key}.png`}
+                      alt={league.key}
+                      className="w-6 h-6 rounded-full object-contain"
+                    />
+                    <div>
+                      <div className="text-sm text-gray-300">
+                        {league.title}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {league.group}
+                      </div>
                     </div>
                   </div>
-                </button>
-              ))}
+                ))
+              ) : (
+                <div className="px-3 py-2 text-sm text-gray-400">
+                  No leagues available
+                </div>
+              )}
             </div>
           </div>
         )}
