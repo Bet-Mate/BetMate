@@ -28,7 +28,7 @@ export default function WalletPage() {
           <div className="bg-[#1e1e1e] rounded-lg p-6">
             <div className="flex mb-4">
               <button
-                className={`flex-1 py-2 px-4 rounded-tl-md rounded-bl-md ${
+                className={`flex-1 py-2 px-4 rounded-tl-md rounded-bl-md border-0 ${
                   activeTab === "deposit" ? "bg-[#ff7b26] text-white" : "bg-[#2a2a2a] text-gray-300 hover:bg-[#3a3a3a]"
                 }`}
                 onClick={() => setActiveTab("deposit")}
@@ -36,7 +36,7 @@ export default function WalletPage() {
                 <ArrowDownCircle className="inline mr-2" /> Deposit
               </button>
               <button
-                className={`flex-1 py-2 px-4 rounded-tr-md rounded-br-md ${
+                className={`flex-1 py-2 px-4 rounded-tr-md rounded-br-md border-0 ${
                   activeTab === "withdraw" ? "bg-[#ff7b26] text-white" : "bg-[#2a2a2a] text-gray-300 hover:bg-[#3a3a3a]"
                 }`}
                 onClick={() => setActiveTab("withdraw")}

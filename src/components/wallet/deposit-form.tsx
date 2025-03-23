@@ -116,7 +116,7 @@ export default function DepositForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-[#ff7b26] text-white py-2 px-4 rounded-md hover:bg-[#e66c1e] transition duration-300 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-[#ff7b26] border-0 text-white py-2 px-4 rounded-md hover:bg-[#e66c1e] transition duration-300 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <>
