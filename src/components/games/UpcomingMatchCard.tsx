@@ -4,7 +4,7 @@ import {
   selectMatchesStatus,
   selectMatchesError,
 } from "@/store/slices/gamesSlice";
-import { AppDispatch, RootState } from "@/store/store";
+import { AppDispatch } from "@/store/store";
 import { Clock } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";

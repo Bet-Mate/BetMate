@@ -2,15 +2,8 @@ import { Search, Wallet } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import BetSlip from "../BettingSlip";
-import { useState } from "react";
 import { selectBetCount, selectBetSlipOpen, toggleBetSlip } from "@/store/slices/bettingSlipSlice";
 
-interface BetMatch {
-  matchId: string;
-  betOutcome: string;
-  odds: number;
-  matchName?: string;
-}
 const Navbar = () => {
   const dispatch = useDispatch();
   const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
