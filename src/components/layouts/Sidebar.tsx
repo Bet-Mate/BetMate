@@ -39,7 +39,7 @@ const Sidebar = () => {
     (state: any) => state.auth.user?.role === "admin"
   );
   const dispatch = useDispatch();
-  const menuItems = isAuth ? (isAdmin ? adminMenu : authMenu) : guestMenu;
+  const menuItems = isAuth ? (!isAdmin ? adminMenu : authMenu) : guestMenu;
 
   async function handleLogout() {
     dispatch(logout());

@@ -1,10 +1,27 @@
-import { Search, Wallet } from 'lucide-react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Search, Wallet } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import BetSlip from "../BettingSlip";
+import { useState } from "react";
+import { selectBetCount, selectBetSlipOpen, toggleBetSlip } from "@/store/slices/bettingSlipSlice";
 
+interface BetMatch {
+  matchId: string;
+  betOutcome: string;
+  odds: number;
+  matchName?: string;
+}
 const Navbar = () => {
+  const dispatch = useDispatch();
   const isAuth = useSelector((state: any) => state.auth.isAuthenticated);
   const user = useSelector((state: any) => state.auth.user) || {};
+  const betCount = useSelector(selectBetCount);
+  const isBetSlipOpen = useSelector(selectBetSlipOpen);
+
+  const handleToggleBetSlip = () => {
+    dispatch(toggleBetSlip());
+  };
+
   return (
     <header className="fixed top-0 right-0 left-64 h-16 bg-[#181818] z-10 flex items-center justify-between px-6">
       <div className="flex-1 max-w-xl">
@@ -17,9 +34,41 @@ const Navbar = () => {
           />
         </div>
       </div>
-      
+
       {isAuth ? (
         <div className="flex items-center gap-6">
+          <div className="flex items-center space-x-4">
+            {/* Bet Slip Button (Desktop) */}
+            <div className="relative hidden md:block">
+              <button
+                onClick={handleToggleBetSlip}
+                className="bg-orange-600 hover:bg-orange-700 text-white rounded-md px-4 py-2 flex items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5z" />
+                  <path d="M11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Bet Slip
+                {betCount > 0 && (
+                  <span className="ml-2 bg-white text-orange-600 rounded-full h-6 w-6 flex items-center justify-center text-sm font-bold">
+                    {betCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Floating Bet Slip */}
+              {isBetSlipOpen && (
+                <div className="absolute right-0 mt-2 w-80 z-50">
+                  <BetSlip />
+                </div>
+              )}
+            </div>
+          </div>
           {/* Balance */}
           <div className="flex items-center gap-2 bg-[#2C2C2E] px-4 py-2 rounded-lg">
             <Wallet className="w-4 h-4 text-orange-500" />
@@ -43,7 +92,9 @@ const Navbar = () => {
             />
             <div className="flex items-center gap-2 cursor-pointer group">
               <div>
-                <div className="text-sm font-medium text-white">{user?.name}</div>
+                <div className="text-sm font-medium text-white">
+                  {user?.name}
+                </div>
                 <div className="text-xs text-gray-400">{user?.email}</div>
               </div>
             </div>
@@ -51,7 +102,10 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <Link to="/login" className="text-gray-300 hover:text-white transition-colors">
+          <Link
+            to="/login"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
             <button className="px-4 py-2 text-gray-300 hover:text-white hover:border-orange-500 transition-colors">
               Login
             </button>
