@@ -301,7 +301,7 @@ export default function AdminTransactionsPage() {
   };
 
   return (
-    <div className="px-4 py-6 max-w-6xl mx-auto">
+    <div className="px-4 py-6 w-full pl-[18rem] mt-16 p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-white">Transaction Management</h1>
         <button
